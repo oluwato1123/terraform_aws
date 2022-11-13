@@ -27,3 +27,16 @@ resource "aws_subnet" "fade_public_subnet" {
     Name = "fade_public_${count.index + 1}"
   }
 }
+
+
+resource "aws_subnet" "fade_private_subnet" {
+  count                   = length(var.private_cidrs)
+  vpc_id                  = aws_vpc.fade_vpc.id
+  cidr_block              = var.private_cidrs[count.index]
+  map_public_ip_on_launch = false
+  availability_zone       = ["us-west-2a", "us-west-2b", "us-west-2c", "us-west-2d"][count.index]
+
+  tags = {
+    Name = "fade_private_${count.index + 1}"
+  }
+}
