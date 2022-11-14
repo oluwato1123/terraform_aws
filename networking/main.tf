@@ -1,5 +1,6 @@
 #-----------networking/main.tf--------------------
 
+data "aws_availability_zones" "available" {}
 resource "random_integer" "random" {
   min = 1
   max = 100
@@ -21,7 +22,7 @@ resource "aws_subnet" "fade_public_subnet" {
   vpc_id                  = aws_vpc.fade_vpc.id
   cidr_block              = var.public_cidrs[count.index]
   map_public_ip_on_launch = true
-  availability_zone       = ["us-west-2a", "us-west-2b", "us-west-2c", "us-west-2d"][count.index]
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
 
   tags = {
     Name = "fade_public_${count.index + 1}"
@@ -34,7 +35,7 @@ resource "aws_subnet" "fade_private_subnet" {
   vpc_id                  = aws_vpc.fade_vpc.id
   cidr_block              = var.private_cidrs[count.index]
   map_public_ip_on_launch = false
-  availability_zone       = ["us-west-2a", "us-west-2b", "us-west-2c", "us-west-2d"][count.index]
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
 
   tags = {
     Name = "fade_private_${count.index + 1}"
