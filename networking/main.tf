@@ -21,7 +21,9 @@ resource "aws_vpc" "fade_vpc" {
   tags = {
     Name = "fade_vpc-${random_integer.random.id}"
   }
-
+  lifecycle {
+    create_before_destroy = true ##very vital
+  }
 }
 
 resource "aws_subnet" "fade_public_subnet" {
