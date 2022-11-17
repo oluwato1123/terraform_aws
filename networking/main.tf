@@ -91,3 +91,23 @@ resource "aws_default_route_table" "fade_privatte_rt" {
     Name = "fade_private"
   }
 } #default route table created by the VPC, you can always create a new route table for the private subnets
+
+
+resource "aws_security_group" "fade_sg" {
+  name        = "public_sg"
+  description = "Security Group for Public Access"
+  vpc_id      = aws_vpc.fade_vpc.id
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.access_ip]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
