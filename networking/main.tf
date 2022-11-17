@@ -117,3 +117,14 @@ resource "aws_security_group" "fade_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+
+resource "aws_db_subnet_group" "mtc_rds_subnetgroup" {
+  count      = var.db_subnet_group == true ? 1 : 0
+  name       = "fade_rds_subnetgroup"
+  subnet_ids = aws_subnet.fade_private_subnet.*.id
+
+  tags = {
+    Name = "fade_rds_sng"
+  }
+}
