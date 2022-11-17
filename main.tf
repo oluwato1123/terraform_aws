@@ -1,15 +1,14 @@
 #----------root/main.tf--------------
 
-#create a locals resource for the vpc_cidr so I don't have to repeat multipe times
-locals {
-  vpc_cidr = "10.124.0.0/16"
-}
+
+
 
 
 module "networking" {
   source           = "./networking"
   vpc_cidr         = local.vpc_cidr
   access_ip        = var.access_ip
+  security_groups  = local.security_groups
   public_sn_count  = 2
   private_sn_count = 3
   max_subnets      = 20
