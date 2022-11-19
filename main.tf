@@ -17,17 +17,30 @@ module "networking" {
   db_subnet_group  = true
 }
 
-module "database" {
-  source                 = "./database"
-  db_storage             = 10
-  db_engine_version      = "5.7"
-  db_instance_class      = "db.t2.micro"
-  dbname                 = var.dbname
-  dbuser                 = var.dbuser
-  dbpassword             = var.dbpassword
-  db_identfier           = "fade-db"
-  skip_db_snapshot       = true
-  db_subnet_group_name   = module.networking.db_subnet_group_name[0]
-  vpc_security_group_ids = module.networking.db_security_group
+# module "database" {
+#   source                 = "./database"
+#   db_storage             = 10
+#   db_engine_version      = "5.7"
+#   db_instance_class      = "db.t2.micro"
+#   dbname                 = var.dbname
+#   dbuser                 = var.dbuser
+#   dbpassword             = var.dbpassword
+#   db_identfier           = "fade-db"
+#   skip_db_snapshot       = true
+#   db_subnet_group_name   = module.networking.db_subnet_group_name[0]
+#   vpc_security_group_ids = module.networking.db_security_group
 
+# }
+
+module "loadbalancing" {
+  source                 = "./loadbalancing"
+  public_sg              = module.networking.public_sg
+  public_subnets         = module.networking.public_subnets
+  vpc_id                 = module.networking.vpc_id
+  tg_port                = 80
+  tg_protocol            = "HTTP"
+  lb_healthy_threshold   = 2
+  lb_unhealthy_threshold = 2
+  lb_timeout             = 3
+  lb_interval            = 30
 }
