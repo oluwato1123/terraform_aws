@@ -18,5 +18,4 @@ output "public_sg" {
 
 output "public_subnets" {
   value = aws_subnet.fade_public_subnet.*.id
-
 }
