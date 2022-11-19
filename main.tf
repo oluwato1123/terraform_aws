@@ -37,12 +37,24 @@ module "loadbalancing" {
   public_sg              = module.networking.public_sg
   public_subnets         = module.networking.public_subnets
   vpc_id                 = module.networking.vpc_id
-  tg_port                = 8000
+  tg_port                = 80
   tg_protocol            = "HTTP"
   lb_healthy_threshold   = 2
   lb_unhealthy_threshold = 2
   lb_timeout             = 3
   lb_interval            = 30
-  listener_port          = 8000
+  listener_port          = 80
   listener_protocol      = "HTTP"
+}
+
+
+module "compute" {
+  source          = "./compute"
+  public_sg       = module.networking.public_sg
+  public_subnets  = module.networking.public_subnets
+  instance_count  = 1
+  instance_type   = "t3.micro"
+  vol_size        = 10
+  key_name        = "fadekey"
+  public_key_path = "C:/keyfade.pub"
 }
